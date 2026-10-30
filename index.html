@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="theme-color" content="#ffd7e7" />
+  <title>For Yoyo ♡</title>
+  <style>
+    :root { color-scheme: light; }
+    * { box-sizing: border-box; }
+    body { margin: 0; min-height: 100svh; display: grid; place-items: center; background: #ffd7e7; font-family: Georgia, 'Times New Roman', serif; color: #32204b; }
+    main { text-align: center; width: min(100%, 760px); padding: 24px 12px 42px; }
+    .eyebrow { font: 600 12px system-ui, sans-serif; letter-spacing: .22em; text-transform: uppercase; opacity: .65; margin: 0 0 8px; }
+    h1 { font-weight: 500; font-size: clamp(29px, 6vw, 50px); margin: 0 0 4px; }
+    .description { font: 15px system-ui, sans-serif; margin: 2px 0 0; opacity: .72; }
+    canvas { display: block; width: min(92vw, 560px); height: auto; aspect-ratio: 1.13; margin: 0 auto; }
+    .note { margin: -12px auto 22px; font-size: clamp(17px, 3vw, 22px); max-width: 510px; line-height: 1.55; }
+    button { border: 1px solid #6b43ad; border-radius: 100px; background: transparent; color: #442873; padding: 11px 20px; cursor: pointer; font: 600 14px system-ui, sans-serif; }
+    button:hover { background: #ffffff88; }
+    footer { margin-top: 27px; font: 12px system-ui, sans-serif; opacity: .58; }
+    @media (prefers-reduced-motion: reduce) { *, *::before, *::after { scroll-behavior: auto !important; } }
+  </style>
+</head>
+<body>
+  <main>
+    <p class="eyebrow">A very serious scientific dedication</p>
+    <h1>For Yoyo ♡</h1>
+    <p class="description">Made with love, and a questionable amount of Python.</p>
+    <canvas id="heart" width="840" height="740" role="img" aria-label="An animated blue heart made of thousands of lines on a pink background"></canvas>
+    <p class="note">Happy birthday, you idiot. I love you more than I will ever admit. ♡</p>
+    <button id="replay" type="button">Draw my heart again ↻</button>
+    <footer>Inspired by Hana's original Python Turtle heart · © our very unserious friendship</footer>
+  </main>
+  <script>
+    // Adapted from Hana's Turtle formulas, preserving the original blue-on-pink design.
+    const canvas = document.getElementById('heart');
+    const ctx = canvas.getContext('2d');
+    const w = canvas.width, h = canvas.height;
+    const scale = Math.min((w - 90) / 30, (h - 100) / 34);
+    const centerX = w / 2, centerY = h / 2 + 15;
+    const total = 6000;
+    let frame, index;
+    function hearta(k) { return 15 * Math.sin(k) ** 3; }
+    function heartb(k) { return 12 * Math.cos(k) - 5 * Math.cos(2*k) - 2 * Math.cos(3*k) - Math.cos(4*k); }
+    function drawLine(i) {
+      const x = centerX + hearta(i) * scale;
+      const y = centerY - heartb(i) * scale;
+      ctx.beginPath(); ctx.moveTo(centerX, centerY); ctx.lineTo(x,y); ctx.stroke();
+    }
+    function animate() {
+      const batch = window.matchMedia('(prefers-reduced-motion: reduce)').matches ? total : 45;
+      for(let n=0; n<batch && index<total; n++,index++) drawLine(index);
+      if(index<total) frame=requestAnimationFrame(animate);
+    }
+    function replay() {
+      cancelAnimationFrame(frame);
+      ctx.clearRect(0,0,w,h);
+      ctx.strokeStyle='rgba(37, 62, 215, .13)';
+      ctx.lineWidth=.85;
+      index=0; animate();
+    }
+    document.getElementById('replay').addEventListener('click', replay);
+    replay();
+  </script>
+</body>
+</html>
